@@ -74,7 +74,7 @@ export function ContactSection() {
                     </Card>
                     <div className="mt-6 flex justify-center">
                         <Image
-                            src="/logo-dark.png"
+                            src="https://static.wixstatic.com/media/c5947c_b368149f9fad4a548d3266fd4e26cae9~mv2.jpg"
                             alt="Noble Health Logo"
                             width={150}
                             height={50}
@@ -86,7 +86,7 @@ export function ContactSection() {
                     {submitted ? (
                         <div className="text-center">
                             <Image
-                                src="/logo-dark.png"
+                                src="https://static.wixstatic.com/media/c5947c_b368149f9fad4a548d3266fd4e26cae9~mv2.jpg"
                                 alt="Noble Health Logo"
                                 width={120}
                                 height={40}
