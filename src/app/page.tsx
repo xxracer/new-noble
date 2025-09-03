@@ -1,3 +1,5 @@
+import { ConsultationBanner } from "@/components/consultation-banner";
+import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
@@ -11,7 +13,9 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <InfoCards />
+        <ConsultationBanner />
         <ServiceCarousel />
+        <ContactSection />
       </main>
       <Footer />
     </div>
