@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ShieldCheck, Users, HeartHandshake } from 'lucide-react';
 
 export function ContactSection() {
     const [submitted, setSubmitted] = useState(false);
-    // This is a simplified state for demonstration.
-    // The full form logic from the user's code can be integrated here.
     const [finalForm, setFinalForm] = useState({
         careRecipientName: '',
         zipcode: '',
@@ -27,7 +27,6 @@ export function ContactSection() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Simplified validation
         if (!finalForm.contactName || !finalForm.contactPhone || !finalForm.contactEmail) {
             alert('Please fill out all required fields.');
             return;
@@ -39,13 +38,41 @@ export function ContactSection() {
     return (
         <section id="contact-shortlink" className="py-12 md:py-20 bg-secondary">
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="text-muted-foreground space-y-6">
-                    <div className="space-y-4">
-                        <p>At Noble Health, every caregiver is thoroughly background-checked, insured, and professional so you can feel confident knowing your family is in safe, capable hands. Call us or leave your info for a free evaluation where we can understand your needs and best support them.</p>
-                        <p>We're a trusted local provider with a commitment to compassion, reliability, and integrity. Let us support your loved one like they're part of our own family.</p>
-                        <p>Beyond Caregiving: While we specialize in private caregiver services, Noble Health is also a full-service home health provider. Through our trusted partner network that includes hospice care, assisted living communities, and skilled nursing we can quickly connect families to the right support, no matter the need.</p>
-                    </div>
-                    <div className="mt-6">
+                <div className="space-y-6">
+                    <Card className="bg-card">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 font-headline text-xl">
+                                <ShieldCheck className="h-6 w-6 text-primary" />
+                                Qualified & Professional
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-muted-foreground">
+                            <p>At Noble Health, every caregiver is thoroughly background-checked, insured, and professional so you can feel confident knowing your family is in safe, capable hands.</p>
+                        </CardContent>
+                    </Card>
+                     <Card className="bg-card">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 font-headline text-xl">
+                                <Users className="h-6 w-6 text-primary" />
+                                Trusted & Compassionate
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-muted-foreground">
+                            <p>We're a trusted local provider with a commitment to compassion, reliability, and integrity. Let us support your loved one like they're part of our own family.</p>
+                        </CardContent>
+                    </Card>
+                     <Card className="bg-card">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 font-headline text-xl">
+                                <HeartHandshake className="h-6 w-6 text-primary" />
+                                Full-Service Provider
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-muted-foreground">
+                             <p>Beyond Caregiving: While we specialize in private caregiver services, Noble Health is also a full-service home health provider. Through our trusted partner network that includes hospice care, assisted living communities, and skilled nursing we can quickly connect families to the right support, no matter the need.</p>
+                        </CardContent>
+                    </Card>
+                    <div className="mt-6 flex justify-center">
                         <Image
                             src="/logo-dark.png"
                             alt="Noble Health Logo"
