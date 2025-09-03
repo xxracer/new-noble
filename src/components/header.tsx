@@ -9,11 +9,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
 
 const navLinks = [
-  { href: "#", label: "Home" },
-  { href: "#services", label: "Services" },
-  { href: "#areas", label: "Areas We Serve" },
-  { href: "#blog", label: "Blog" },
-  { href: "#work", label: "Work with Us" },
+  { href: "#", label: "Services" },
+  { href: "#", label: "Blog" },
 ];
 
 export function Header() {
@@ -30,20 +27,14 @@ export function Header() {
             <Link
               key={link.label}
               href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              className="transition-colors hover:text-foreground/80 text-foreground"
             >
               {link.label}
             </Link>
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
-          <Button variant="outline" className="hidden sm:inline-flex" asChild>
-            <a href="tel:+1234567890">
-              <Phone className="mr-2 h-4 w-4" />
-              Call Us
-            </a>
-          </Button>
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Free Care Consultation</Button>
+          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">CALL US</Button>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button
@@ -72,12 +63,6 @@ export function Header() {
                     </Link>
                   ))}
                 </nav>
-                <Button variant="outline" className="mt-6 w-full" asChild>
-                  <a href="tel:+1234567890">
-                    <Phone className="mr-2 h-4 w-4" />
-                    Call Us
-                  </a>
-                </Button>
               </div>
             </SheetContent>
           </Sheet>
