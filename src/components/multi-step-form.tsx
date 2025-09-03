@@ -75,10 +75,14 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
   });
 
   const step1Form = useForm<Step1Data>({ resolver: zodResolver(step1Schema), defaultValues: {zipcode: ''} });
-  const finalForm = useForm<FinalStepData>({ resolver: zodResolver(finalStepSchema) });
+  const finalForm = useForm<FinalStepData>({ resolver: zodResolver(finalStepSchema), defaultValues: { contactName: '', contactEmail: '', contactPhone: '' } });
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
+
+  const handleSingleSelect = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const onStep1Submit = async (data: Step1Data) => {
     setLoading(true);
@@ -99,7 +103,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
     }
   };
   
-  const onStepSubmit = (step: number, field: keyof typeof formData, value: string) => {
+  const onStepSubmit = (step: number, field: keyof typeof formData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if(step === 5) {
       setCurrentStep(6); // Loading screen
@@ -156,7 +160,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                       <FormControl>
                         <Input placeholder="Enter ZIP code" {...field} className="flex-grow text-base h-12 text-gray-800" />
                       </FormControl>
-                      <Button type="submit" size="lg" className="h-12 bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading || field.value.length !== 5}>
+                      <Button type="submit" size="lg" className="h-12 bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading || (field.value?.length || 0) !== 5}>
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Find Care Near Me
                       </Button>
@@ -227,7 +231,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                     ))}
                     {hoursOptions.map(opt => (
                         <label key={`label-${opt}`} htmlFor={`hr-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.hours === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
-                            {opt === 'less10' ? '< 10' : opt === '40plus' ? '40+' : opt === 'unsure' ? 'Not Sure' : opt}
+                            {opt === 'less10' ? '&lt; 10' : opt === '40plus' ? '40+' : opt === 'unsure' ? 'Not Sure' : opt}
                         </label>
                     ))}
                 </RadioGroup>
@@ -308,6 +312,8 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                                             const contactName = finalForm.getValues('contactName');
                                             if (isChecked && contactName) {
                                                 finalForm.setValue('careRecipientName', contactName);
+                                            } else if (!isChecked) {
+                                                finalForm.setValue('careRecipientName', '');
                                             }
                                         }}/>
                                     </FormControl>
@@ -383,3 +389,5 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
     </Card>
   );
 }
+
+    
