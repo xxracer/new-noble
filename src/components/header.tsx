@@ -36,9 +36,9 @@ export function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
-           <Button variant="outline" className="hidden sm:flex">FREE CARE CONSULTATION</Button>
+           <Button variant="outline" className="hidden sm:flex bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">FREE CARE CONSULTATION</Button>
            <a href="tel:+17133642295">
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Phone className="mr-2 h-4 w-4" />
                 <div className="text-left">
                     <div className="text-xs leading-tight">CALL US</div>

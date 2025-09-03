@@ -67,19 +67,18 @@ export function Hero() {
     <section className="relative w-full bg-primary">
       <div className="container grid lg:grid-cols-2 gap-12 items-center">
         <div className="relative z-10 text-white py-12 lg:py-16">
-          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
             Simplifying the search for in home care in <span className="text-accent">{location}</span>
           </h1>
 
           <MultiStepForm initialLocation={location} />
         </div>
         <div className="relative h-full min-h-[350px] lg:min-h-0 lg:h-full w-full">
-          <div className="hidden lg:block absolute bg-accent w-full h-full -skew-x-6 -ml-16"></div>
           <Image
-            src="https://static.wixstatic.com/media/c5947c_ae07f633ef7b4881957225ef75782961~mv2.jpg"
+            src="https://static.wixstatic.com/media/c5947c_df507abdf87647b4abca62a33bc81449~mv2.jpg"
             alt="Caregiver with a senior patient"
             fill
-            className="object-cover lg:rounded-lg lg:shadow-xl lg:-skew-x-6"
+            className="object-cover lg:rounded-lg lg:shadow-xl"
             data-ai-hint="caregiver patient"
             priority
           />
