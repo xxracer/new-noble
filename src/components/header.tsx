@@ -7,6 +7,7 @@ import { Menu, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/logo";
+import styles from './header.module.css';
 
 const navLinks = [
   { href: "#", label: "Services" },
@@ -20,10 +21,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center justify-between">
+      <div className={`container flex h-20 items-center justify-between ${styles.container}`}>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className={`hidden md:flex items-center gap-4 ${styles.desktopNav}`}>
            <Link href="/">
             <Logo />
           </Link>
@@ -40,7 +41,7 @@ export function Header() {
           </nav>
         </div>
         
-        <div className="hidden md:flex items-center gap-2">
+        <div className={`hidden md:flex items-center gap-2 ${styles.desktopActions}`}>
            <Button variant="outline" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">
             <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
               FREE CARE CONSULTATION
@@ -58,11 +59,11 @@ export function Header() {
         </div>
 
         {/* Mobile Nav */}
-        <div className="flex w-full items-center justify-between md:hidden">
-            <div className="flex items-center gap-2">
+        <div className={`flex w-full items-center justify-between md:hidden ${styles.mobileNav}`}>
+            <div className={styles.mobileNavLeft}>
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Toggle menu" className="h-9 w-9">
+                    <Button variant="ghost" size="icon" aria-label="Toggle menu" className={`h-9 w-9 ${styles.menuButton}`}>
                       <Menu className="h-6 w-6" />
                     </Button>
                   </SheetTrigger>
@@ -95,14 +96,14 @@ export function Header() {
                     </div>
                   </SheetContent>
                 </Sheet>
-                 <Link href="/" className="flex-shrink-0">
+                 <Link href="/" className={styles.mobileLogo}>
                     <Logo />
                  </Link>
             </div>
 
-            <div className="flex items-center">
+            <div className={styles.mobileNavRight}>
                 <a href="tel:+17133642295">
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap">
+                    <Button size="sm" className={`bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap ${styles.callButton}`}>
                         <Phone className="mr-1 h-3 w-3" />
                         <span>(713) 364-2295</span>
                     </Button>

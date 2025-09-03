@@ -1,0 +1,54 @@
+
+.desktopNav,
+.desktopActions {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobileNav {
+    display: none;
+  }
+  .desktopNav,
+  .desktopActions {
+    display: flex;
+  }
+}
+
+.mobileNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.mobileNavLeft {
+  display: flex;
+  align-items: center;
+  gap: 0; 
+}
+
+.menuButton {
+  padding: 0;
+  margin-right: 8px;
+}
+
+.mobileLogo {
+  flex-shrink: 0;
+}
+
+.mobileNavRight {
+  display: flex;
+  align-items: center;
+}
+
+.callButton {
+  white-space: nowrap;
+}
+
+/* Remove container padding on mobile to use full width */
+@media (max-width: 767px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
