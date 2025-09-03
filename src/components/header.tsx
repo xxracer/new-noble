@@ -21,26 +21,29 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center justify-between">
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
            <Link href="/">
             <Logo />
           </Link>
+          <nav className="hidden items-center gap-6 text-base font-medium md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="transition-colors hover:text-foreground/80 text-foreground text-lg"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         
-        <nav className="hidden items-center gap-6 text-base font-medium md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground text-lg"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
         <div className="hidden md:flex items-center gap-2">
-           <Button variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">FREE CARE CONSULTATION</Button>
+           <Button variant="outline" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">
+            <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
+              FREE CARE CONSULTATION
+            </Link>
+          </Button>
            <a href="tel:+17133642295">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Phone className="mr-2 h-4 w-4" />
