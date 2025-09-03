@@ -32,7 +32,7 @@ export function Header() {
             <Link
               key={link.label}
               href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground"
+              className="transition-colors hover:text-foreground/80 text-foreground text-lg"
             >
               {link.label}
             </Link>
@@ -40,7 +40,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
-           <Button variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">FREE CARE CONSULTATION</Button>
+           <Button variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">FREE CARE CONSULTATION</Button>
            <a href="tel:+17133642295">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Phone className="mr-2 h-4 w-4" />
@@ -52,14 +52,17 @@ export function Header() {
           </a>
         </div>
 
+        {/* Mobile Nav */}
         <div className="flex items-center gap-2 md:hidden">
+            <Button asChild variant="outline" size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-xs px-2">
+              <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
+                Free Consultation
+              </Link>
+            </Button>
             <a href="tel:+17133642295">
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                    <Phone className="mr-2 h-4 w-4" />
-                    <div className="text-left">
-                        <div className="text-xs leading-tight">CALL US</div>
-                        <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
-                    </div>
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-2">
+                    <Phone className="mr-1 h-3 w-3" />
+                    <span>Call Us</span>
                 </Button>
             </a>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -68,6 +71,7 @@ export function Header() {
                     variant="ghost"
                     size="icon"
                     aria-label="Toggle menu"
+                    className="ml-2"
                 >
                     <Menu className="h-6 w-6" />
                 </Button>
@@ -80,11 +84,6 @@ export function Header() {
                     </Link>
                     </div>
                     <nav className="grid gap-4">
-                    <Button asChild variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">
-                        <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
-                        FREE CARE CONSULTATION
-                        </Link>
-                    </Button>
                     {navLinks.map((link) => (
                         <Link
                         key={link.label}
@@ -100,6 +99,7 @@ export function Header() {
                 </SheetContent>
             </Sheet>
         </div>
+
       </div>
     </header>
   );
