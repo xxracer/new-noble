@@ -1,0 +1,77 @@
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.flipCard {
+  background-color: transparent;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.flipCard:hover .flipCardInner {
+  transform: rotateY(180deg);
+}
+
+.flipCardFront, .flipCardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: white;
+}
+
+.flipCardBack {
+  transform: rotateY(180deg);
+}
+
+.serviceIcon {
+  margin-bottom: 1rem;
+}
+
+.serviceIcon svg {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+
+.nursingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.nursingList li {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  padding-left: 20px;
+}
+
+.nursingList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #6B9362; /* Accent color */
+  font-weight: bold;
+}
