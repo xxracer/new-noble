@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { InfoCards } from "@/components/info-cards";
 import { ServiceCarousel } from "@/components/service-carousel";
+import { AreasWeServe } from "@/components/areas-we-serve";
 
 export default function Home() {
   return (
@@ -14,8 +15,9 @@ export default function Home() {
         <Hero />
         <InfoCards />
         <ConsultationBanner />
-        <ServiceCarousel />
         <ContactSection />
+        <AreasWeServe />
+        <ServiceCarousel />
       </main>
       <Footer />
     </div>
