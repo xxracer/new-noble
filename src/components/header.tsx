@@ -63,7 +63,7 @@ export function Header() {
             <Logo />
           </Link>
 
-          <div className="flex flex-shrink-0 items-center gap-1">
+          <div className="flex items-center gap-1">
             <Button asChild variant="outline" size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-xs px-2 whitespace-nowrap">
                 <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
                     Free Consultation
@@ -77,7 +77,7 @@ export function Header() {
             </a>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Toggle menu" className="ml-1">
+                <Button variant="ghost" size="icon" aria-label="Toggle menu" className="ml-1 h-8 w-8">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
