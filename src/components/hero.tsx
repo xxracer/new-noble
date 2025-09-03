@@ -65,20 +65,31 @@ export function Hero() {
 
   return (
     <section className="relative w-full bg-primary">
-      <div className="container grid lg:grid-cols-2 gap-12 items-center">
-        <div className="relative z-10 text-white py-12 lg:py-16">
-          <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+      <div className="absolute inset-0 lg:hidden">
+         <Image
+            src="https://static.wixstatic.com/media/c5947c_df507abdf87647b4abca62a33bc81449~mv2.jpg"
+            alt="Caregiver with a senior patient"
+            fill
+            className="object-cover"
+            data-ai-hint="caregiver patient"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+      <div className="container grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="text-white py-12 lg:py-16">
+          <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
             Simplifying the search for in home care in <span className="text-accent">{location}</span>
           </h1>
 
           <MultiStepForm initialLocation={location} />
         </div>
-        <div className="relative h-full min-h-[350px] lg:min-h-0 lg:h-full w-full">
+        <div className="relative h-full min-h-[350px] lg:min-h-0 lg:h-full w-full hidden lg:block">
           <Image
             src="https://static.wixstatic.com/media/c5947c_df507abdf87647b4abca62a33bc81449~mv2.jpg"
             alt="Caregiver with a senior patient"
             fill
-            className="object-cover lg:rounded-lg lg:shadow-xl"
+            className="object-cover object-center lg:object-left lg:rounded-lg lg:shadow-xl"
             data-ai-hint="caregiver patient"
             priority
           />

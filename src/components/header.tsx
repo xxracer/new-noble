@@ -59,7 +59,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="px-2 py-6">
-                <div className="mb-6 flex items-center" onClick={() => setIsOpen(false)}>
+                <div className="mb-6" onClick={() => setIsOpen(false)}>
                   <Logo />
                 </div>
                 <nav className="grid gap-4">
