@@ -9,7 +9,7 @@ export function Logo({ className }: { className?: string }) {
         alt="Noble Health Logo"
         width={150}
         height={50}
-        className='h-auto'
+        className='h-auto w-auto'
       />
     </div>
   );
