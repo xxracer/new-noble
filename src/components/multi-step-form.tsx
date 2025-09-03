@@ -277,12 +277,12 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                     <h3 className="font-bold text-lg">Contact Information</h3>
                     <p className="text-sm text-muted-foreground">You are in: {locationText}</p>
 
-                    <div className="flex items-center space-x-2">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
                         <FormField
                             control={finalForm.control}
                             name="careRecipientName"
                             render={({ field }) => (
-                                <FormItem className="flex-grow">
+                                <FormItem className="flex-grow w-full">
                                     <FormControl>
                                         <Input placeholder="Name of person needing care" {...field} disabled={finalForm.watch("isSelf")} />
                                     </FormControl>
@@ -294,7 +294,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                             control={finalForm.control}
                             name="isSelf"
                             render={({ field }) => (
-                                <FormItem className="flex items-center space-x-2">
+                                <FormItem className="flex items-center space-x-2 pt-2 sm:pt-0">
                                      <FormControl>
                                         <Checkbox checked={field.value} onCheckedChange={field.onChange}/>
                                     </FormControl>

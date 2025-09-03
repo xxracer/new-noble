@@ -10,7 +10,7 @@ import { Logo } from "@/components/logo";
 
 const navLinks = [
   { href: "#", label: "Services" },
-  { href: "#", label: "Areas We Serve" },
+  { href: "#areas-we-serve", label: "Areas We Serve" },
   { href: "#", label: "Blog" },
   { href: "#", label: "Work with Us" },
 ];
@@ -21,9 +21,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center">
-        <Link href="/" className="mr-6 flex items-center">
+        <div className="mr-6 flex items-center">
           <Logo />
-        </Link>
+        </div>
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
           {navLinks.map((link) => (
             <Link
@@ -59,9 +59,9 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="px-2 py-6">
-                <Link href="/" className="mb-6 flex items-center" onClick={() => setIsOpen(false)}>
+                <div className="mb-6 flex items-center" onClick={() => setIsOpen(false)}>
                   <Logo />
-                </Link>
+                </div>
                 <nav className="grid gap-4">
                   {navLinks.map((link) => (
                     <Link
