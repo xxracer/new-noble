@@ -178,9 +178,9 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                     <RadioGroupItem key={opt} value={opt} id={`rel-${opt}`} className="sr-only" />
                 ))}
                 {relationshipOptions.map(opt => (
-                     <FormLabel key={`label-${opt}`} htmlFor={`rel-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.relationship === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
+                     <label key={`label-${opt}`} htmlFor={`rel-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.relationship === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
                         {opt.replace('-', ' ').toUpperCase()}
-                    </FormLabel>
+                    </label>
                 ))}
             </RadioGroup>
              <div className="mt-6 flex justify-between">
@@ -200,9 +200,9 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                     <RadioGroupItem key={opt} value={opt} id={`urg-${opt}`} className="sr-only" />
                 ))}
                 {urgencyOptions.map(opt => (
-                    <FormLabel key={`label-${opt}`} htmlFor={`urg-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.urgency === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
+                    <label key={`label-${opt}`} htmlFor={`urg-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.urgency === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
                         {opt === '7days' ? 'Within 7 days' : opt === '30days' ? 'Within 30 days' : opt.charAt(0).toUpperCase() + opt.slice(1)}
-                    </FormLabel>
+                    </label>
                 ))}
             </RadioGroup>
              <div className="mt-6 flex justify-between">
@@ -222,9 +222,9 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                         <RadioGroupItem key={opt} value={opt} id={`hr-${opt}`} className="sr-only" />
                     ))}
                     {hoursOptions.map(opt => (
-                        <FormLabel key={`label-${opt}`} htmlFor={`hr-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.hours === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
+                        <label key={`label-${opt}`} htmlFor={`hr-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.hours === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
                             {opt === 'less10' ? '< 10' : opt === '40plus' ? '40+' : opt === 'unsure' ? 'Not Sure' : opt}
-                        </FormLabel>
+                        </label>
                     ))}
                 </RadioGroup>
                 <div className="mt-6 flex justify-between">
@@ -244,9 +244,9 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                         <RadioGroupItem key={opt} value={opt} id={`pay-${opt}`} className="sr-only" />
                     ))}
                     {paymentOptions.map(opt => (
-                        <FormLabel key={`label-${opt}`} htmlFor={`pay-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.payment === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
+                        <label key={`label-${opt}`} htmlFor={`pay-${opt}`} className={`border rounded-md p-4 text-center cursor-pointer hover:bg-accent/20 ${formData.payment === opt ? 'bg-accent text-accent-foreground border-accent' : 'bg-white'}`}>
                              {opt === 'va' ? 'VA' : opt === 'insurance' ? 'Long-term care insurance' : opt.charAt(0).toUpperCase() + opt.slice(1)}
-                        </FormLabel>
+                        </label>
                     ))}
                 </RadioGroup>
                 <div className="mt-6 flex justify-between">
