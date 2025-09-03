@@ -20,12 +20,13 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center">
-        <div className="mr-auto flex items-center md:mr-6">
+      <div className="container flex h-20 items-center justify-between">
+        <div className="flex items-center">
            <Link href="/">
             <Logo />
           </Link>
         </div>
+        
         <nav className="hidden items-center gap-6 text-base font-medium md:flex">
           {navLinks.map((link) => (
             <Link
@@ -37,8 +38,9 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
-           <Button variant="outline" className="hidden sm:flex bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">FREE CARE CONSULTATION</Button>
+
+        <div className="hidden md:flex items-center gap-2">
+           <Button variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">FREE CARE CONSULTATION</Button>
            <a href="tel:+17133642295">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 <Phone className="mr-2 h-4 w-4" />
@@ -48,44 +50,55 @@ export function Header() {
                 </div>
             </Button>
           </a>
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                className="md:hidden"
-                size="icon"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <div className="px-2 py-6">
-                <div className="mb-6" onClick={() => setIsOpen(false)}>
-                  <Link href="/">
-                    <Logo />
-                  </Link>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+            <a href="tel:+17133642295">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                    <Phone className="mr-2 h-4 w-4" />
+                    <div className="text-left">
+                        <div className="text-xs leading-tight">CALL US</div>
+                        <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
+                    </div>
+                </Button>
+            </a>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Toggle menu"
+                >
+                    <Menu className="h-6 w-6" />
+                </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                <div className="px-2 py-6">
+                    <div className="mb-6" onClick={() => setIsOpen(false)}>
+                    <Link href="/">
+                        <Logo />
+                    </Link>
+                    </div>
+                    <nav className="grid gap-4">
+                    <Button asChild variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">
+                        <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+                        FREE CARE CONSULTATION
+                        </Link>
+                    </Button>
+                    {navLinks.map((link) => (
+                        <Link
+                        key={link.label}
+                        href={link.href}
+                        className="text-lg font-medium text-foreground/80 hover:text-foreground"
+                        onClick={() => setIsOpen(false)}
+                        >
+                        {link.label}
+                        </Link>
+                    ))}
+                    </nav>
                 </div>
-                <nav className="grid gap-4">
-                  <Button asChild variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">
-                    <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
-                      FREE CARE CONSULTATION
-                    </Link>
-                  </Button>
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      className="text-lg font-medium text-foreground/80 hover:text-foreground"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
+                </SheetContent>
+            </Sheet>
         </div>
       </div>
     </header>
