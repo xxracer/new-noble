@@ -100,7 +100,7 @@ export function Header() {
                  </Link>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
                 <a href="tel:+17133642295">
                     <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap">
                         <Phone className="mr-1 h-3 w-3" />
