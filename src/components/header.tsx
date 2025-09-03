@@ -63,21 +63,16 @@ export function Header() {
             <Logo />
           </Link>
 
-          <div className="flex items-center gap-1">
-            <Button asChild variant="outline" size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-xs px-2 whitespace-nowrap">
-                <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
-                    Free Consultation
-                </Link>
-            </Button>
+          <div className="flex items-center gap-2">
             <a href="tel:+17133642295">
-                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-2 whitespace-nowrap">
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap">
                     <Phone className="mr-1 h-3 w-3" />
                     <span>Call Us</span>
                 </Button>
             </a>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Toggle menu" className="ml-1 h-8 w-8">
+                <Button variant="ghost" size="icon" aria-label="Toggle menu" className="h-9 w-9">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
@@ -100,6 +95,13 @@ export function Header() {
                       </Link>
                     ))}
                   </nav>
+                  <div className="mt-6">
+                     <Button variant="outline" asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground font-bold">
+                        <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+                          FREE CARE CONSULTATION
+                        </Link>
+                      </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
