@@ -21,14 +21,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className={`container flex h-20 items-center justify-between ${styles.container}`}>
+      <div className={`container flex h-20 items-center ${styles.container}`}>
         
         {/* Desktop Nav */}
-        <div className={`hidden md:flex items-center gap-4 ${styles.desktopNav}`}>
-           <Link href="/">
-            <Logo />
-          </Link>
-          <nav className="items-center gap-6 text-base font-medium md:flex">
+        <div className={styles.desktopNav}>
+           <div className={styles.desktopNavLeft}>
+             <Link href="/">
+              <Logo />
+            </Link>
+           </div>
+          <nav className={styles.desktopNavCenter}>
             {navLinks.map((link) => (
               <Link
                 key={link.label}
@@ -39,31 +41,30 @@ export function Header() {
               </Link>
             ))}
           </nav>
-        </div>
-        
-        <div className={`hidden md:flex items-center gap-2 ${styles.desktopActions}`}>
-           <Button variant="outline" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">
-            <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
-              FREE CARE CONSULTATION
-            </Link>
-          </Button>
-           <a href="tel:+17133642295">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Phone className="mr-2 h-4 w-4" />
-                <div className="text-left">
-                    <div className="text-xs leading-tight">CALL US</div>
-                    <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
-                </div>
+          <div className={styles.desktopNavRight}>
+             <Button variant="outline" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground text-sm font-bold">
+              <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer">
+                FREE CARE CONSULTATION
+              </Link>
             </Button>
-          </a>
+             <a href="tel:+17133642295">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Phone className="mr-2 h-4 w-4" />
+                  <div className="text-left">
+                      <div className="text-xs leading-tight">CALL US</div>
+                      <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
+                  </div>
+              </Button>
+            </a>
+          </div>
         </div>
 
         {/* Mobile Nav */}
-        <div className={`flex w-full items-center justify-between md:hidden ${styles.mobileNav}`}>
+        <div className={styles.mobileNav}>
             <div className={styles.mobileNavLeft}>
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Toggle menu" className={`h-9 w-9 ${styles.menuButton}`}>
+                    <Button variant="ghost" size="icon" aria-label="Toggle menu" className={styles.menuButton}>
                       <Menu className="h-6 w-6" />
                     </Button>
                   </SheetTrigger>
@@ -100,7 +101,6 @@ export function Header() {
                     <Logo />
                  </Link>
             </div>
-
             <div className={styles.mobileNavRight}>
                 <a href="tel:+17133642295">
                     <Button size="sm" className={`bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap ${styles.callButton}`}>

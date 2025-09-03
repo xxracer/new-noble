@@ -1,17 +1,6 @@
-
-.desktopNav,
-.desktopActions {
+/* Default to mobile styles */
+.desktopNav {
   display: none;
-}
-
-@media (min-width: 768px) {
-  .mobileNav {
-    display: none;
-  }
-  .desktopNav,
-  .desktopActions {
-    display: flex;
-  }
 }
 
 .mobileNav {
@@ -24,12 +13,12 @@
 .mobileNavLeft {
   display: flex;
   align-items: center;
-  gap: 0; 
+  gap: 4px; /* Adjust gap between menu button and logo */
 }
 
 .menuButton {
   padding: 0;
-  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .mobileLogo {
@@ -39,10 +28,11 @@
 .mobileNavRight {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .callButton {
-  white-space: nowrap;
+  white-space: nowrap; /* Ensures the button text doesn't wrap */
 }
 
 /* Remove container padding on mobile to use full width */
@@ -51,4 +41,41 @@
         padding-left: 1rem;
         padding-right: 1rem;
     }
+}
+
+
+/* Desktop styles (768px and up) */
+@media (min-width: 768px) {
+  .mobileNav {
+    display: none;
+  }
+  
+  .desktopNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .desktopNavLeft {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .desktopNavCenter {
+    flex: 2; /* Allows it to take more space */
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .desktopNavRight {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
