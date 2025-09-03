@@ -10,7 +10,9 @@ import { Logo } from "@/components/logo";
 
 const navLinks = [
   { href: "#", label: "Services" },
+  { href: "#", label: "Areas We Serve" },
   { href: "#", label: "Blog" },
+  { href: "#", label: "Work with Us" },
 ];
 
 export function Header() {
@@ -18,7 +20,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-20 items-center">
         <Link href="/" className="mr-6 flex items-center">
           <Logo />
         </Link>
@@ -34,7 +36,16 @@ export function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">CALL US</Button>
+           <Button variant="outline" className="hidden sm:flex">FREE CARE CONSULTATION</Button>
+           <a href="tel:+17133642295">
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Phone className="mr-2 h-4 w-4" />
+                <div className="text-left">
+                    <div className="text-xs leading-tight">CALL US</div>
+                    <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
+                </div>
+            </Button>
+          </a>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button
@@ -62,6 +73,9 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
+                   <Link href="#" className="text-lg font-medium text-foreground/80 hover:text-foreground" onClick={() => setIsOpen(false)}>
+                        FREE CARE CONSULTATION
+                    </Link>
                 </nav>
               </div>
             </SheetContent>

@@ -8,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
       <div className='bg-white p-1 rounded-md'>
         <HeartPulse className="h-7 w-7 text-primary" />
       </div>
-      <span className="font-headline text-xl font-bold text-white">
+      <span className="font-headline text-xl font-bold text-primary-foreground md:text-gray-800">
         Noble Health
       </span>
     </Link>

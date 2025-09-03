@@ -1,9 +1,7 @@
-import { CtaSection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { InfoCards } from "@/components/info-cards";
-import { MiniForm } from "@/components/mini-form";
 import { ServiceCarousel } from "@/components/service-carousel";
 
 export default function Home() {
@@ -14,8 +12,6 @@ export default function Home() {
         <Hero />
         <InfoCards />
         <ServiceCarousel />
-        <CtaSection />
-        <MiniForm />
       </main>
       <Footer />
     </div>

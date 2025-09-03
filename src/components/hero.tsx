@@ -1,48 +1,88 @@
+"use client";
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+import { MultiStepForm } from '@/components/multi-step-form';
 
 export function Hero() {
+  const [location, setLocation] = useState("your city, TX");
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              try {
+                const { latitude, longitude } = position.coords;
+                const response = await fetch(
+                  `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+                );
+                if (response.ok) {
+                  const data = await response.json();
+                  const city = data.locality || data.city;
+                  const state = data.principalSubdivisionCode ? data.principalSubdivisionCode.replace('US-','') : 'TX';
+                  if (city && state) {
+                    setLocation(`${city}, ${state}`);
+                  }
+                }
+              } catch (error) {
+                console.error('Error getting location from reverse geocoding:', error);
+                // Fallback to IP-based location
+                fetchLocationFromIp();
+              }
+            },
+            (error) => {
+              console.warn(`Geolocation error (${error.code}): ${error.message}`);
+              fetchLocationFromIp();
+            },
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+          );
+        } else {
+          fetchLocationFromIp();
+        }
+      } catch (error) {
+        console.error('Error in fetchLocation:', error);
+        fetchLocationFromIp();
+      }
+    };
+    
+    const fetchLocationFromIp = async () => {
+        try {
+            const response = await fetch('/api/get-location-data');
+             if (response.ok) {
+                 const data = await response.json();
+                 if (data.city && data.region) {
+                     setLocation(`${data.city}, ${data.region}`);
+                 }
+             }
+        } catch (error) {
+            console.error('Error fetching location from IP:', error);
+        }
+    };
+
+    fetchLocation();
+  }, []);
+
   return (
     <section className="relative w-full bg-primary">
-      <div className="container grid lg:grid-cols-2 gap-8 items-center">
-        <div className="relative z-10 text-white py-12 lg:py-24">
+      <div className="container grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 text-white py-12 lg:py-16">
           <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-            Simplifying the search for in home care in Caracas, Distrito Federal
+            Simplifying the search for in home care in <span className="text-accent">{location}</span>
           </h1>
 
-          <Card className="mt-10">
-            <CardContent className="p-6">
-                <p className="mb-4 text-lg text-foreground font-semibold">
-                    Start by entering your ZIP code and we&apos;ll match you with the right in-home care options, personalized for your needs.
-                </p>
-                <form>
-                <div className="flex flex-col gap-4 sm:flex-row">
-                    <Input
-                    type="text"
-                    placeholder="Enter ZIP code"
-                    className="flex-grow text-base h-12 text-gray-800"
-                    aria-label="ZIP code"
-                    />
-                    <Button type="submit" size="lg" className="h-12 bg-accent hover:bg-accent/90 text-accent-foreground">
-                    Find Care Near Me
-                    </Button>
-                </div>
-                </form>
-            </CardContent>
-          </Card>
+          <MultiStepForm initialLocation={location} />
         </div>
-        <div className="relative h-full min-h-[300px] lg:min-h-0 lg:h-full w-full">
-            <div className="hidden lg:block absolute bg-accent w-full h-full -skew-x-6 -ml-16"></div>
-             <Image
-                src="https://picsum.photos/800/900"
-                alt="Caregiver with a senior patient"
-                fill
-                className="object-cover lg:rounded-lg lg:shadow-xl lg:-skew-x-6"
-                data-ai-hint="caregiver patient"
-                priority
-            />
+        <div className="relative h-full min-h-[350px] lg:min-h-0 lg:h-full w-full">
+          <div className="hidden lg:block absolute bg-accent w-full h-full -skew-x-6 -ml-16"></div>
+          <Image
+            src="https://picsum.photos/800/900"
+            alt="Caregiver with a senior patient"
+            fill
+            className="object-cover lg:rounded-lg lg:shadow-xl lg:-skew-x-6"
+            data-ai-hint="caregiver patient"
+            priority
+          />
         </div>
       </div>
     </section>
