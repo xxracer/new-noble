@@ -62,9 +62,16 @@ export function Header() {
             <SheetContent side="right">
               <div className="px-2 py-6">
                 <div className="mb-6" onClick={() => setIsOpen(false)}>
-                  <Logo />
+                  <Link href="/">
+                    <Logo />
+                  </Link>
                 </div>
                 <nav className="grid gap-4">
+                  <Button asChild variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground">
+                    <Link href="https://www.mynoblehealth.com/free-consultation" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+                      FREE CARE CONSULTATION
+                    </Link>
+                  </Button>
                   {navLinks.map((link) => (
                     <Link
                       key={link.label}
@@ -75,9 +82,6 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                   <Link href="#" className="text-lg font-medium text-foreground/80 hover:text-foreground" onClick={() => setIsOpen(false)}>
-                        FREE CARE CONSULTATION
-                    </Link>
                 </nav>
               </div>
             </SheetContent>
