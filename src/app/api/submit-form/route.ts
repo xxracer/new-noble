@@ -1,52 +1,79 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-// Helper function to map form data to AxisCare format
+// Helper function to map form data to AxisCare lead format
 const mapToAxisCareLead = (data: any) => {
-    const nameParts = data.contactName.split(' ');
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
+    const [firstName, ...lastNameParts] = data.contactName.split(' ');
+    const lastName = lastNameParts.join(' ') || 'Last Name';
 
-    let relationshipToClient = 'Other';
-    const relationshipMap: { [key: string]: string } = {
-        'spouse': 'Spouse',
-        'parent': 'Child',
-        'myself': 'Self',
-        'someone-else': 'Other'
+    const formSelections = {
+        "Lead Source": "Lead from Home Page",
+        "ZIP Code": data.zipcode,
+        "Who Are You Searching Care For?": data.relationship ? data.relationship.replace(/-/g, ' ').toUpperCase() : 'N/A',
+        "How Quickly Do You Need Care?": data.urgency === '7days' ? 'Within 7 days' : 
+                                        data.urgency === '30days' ? 'Within 30 days' : 
+                                        data.urgency ? data.urgency.charAt(0).toUpperCase() + data.urgency.slice(1) : 'N/A',
+        "Hours Needed Per Week": data.hours === 'less10' ? 'Less than 10' :
+                                data.hours === '11-20' ? '11-20' :
+                                data.hours === '21-40' ? '21-40' :
+                                data.hours === '40plus' ? '40+' : 'Not sure',
+        "How Do You Plan to Pay?": data.payment === 'va' ? 'VA' :
+                                  data.payment === 'insurance' ? 'Long-term care insurance' :
+                                  data.payment ? data.payment.charAt(0).toUpperCase() + data.payment.slice(1) : 'N/A',
+        "Name of the person needing care": data.careRecipientName || 'N/A',
+        "Check if for yourself": data.isSelf ? "Yes" : "No",
+        "Contact name": data.contactName,
+        "Contact phone number": data.contactPhone.replace(/\D/g, ''),
+        "Contact email": data.contactEmail,
+        "Best time to contact you": data.bestTime || 'Not specified',
+        "Best contact method": data.contactMethod || 'Not specified',
+        "Additional notes": data.additionalInfo || 'None'
     };
-    if (data.relationship && relationshipMap[data.relationship]) {
-        relationshipToClient = relationshipMap[data.relationship];
-    }
-    
+
+    const formattedSelections = Object.entries(formSelections)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+
     return {
-        marketing_referral_source_id: 1, // Default or map as needed
-        client_first_name: data.isSelf ? firstName : data.careRecipientName || 'Unknown',
-        client_last_name: data.isSelf ? lastName : '(lead)',
-        client_zip: data.zipcode,
-        caller_first_name: firstName,
-        caller_last_name: lastName,
-        caller_email: data.contactEmail,
-        caller_phone: data.contactPhone,
-        relationship_to_client: relationshipToClient,
-        notes: `
-            Urgency: ${data.urgency || 'N/A'}
-            Hours per week: ${data.hours || 'N/A'}
-            Payment method: ${data.payment || 'N/A'}
-            Best time to contact: ${data.bestTime || 'N/A'}
-            Contact method: ${data.contactMethod || 'N/A'}
-            Additional Info: ${data.additionalInfo || 'N/A'}
-        `,
+        firstName: firstName || 'First Name',
+        lastName: lastName,
+        personalEmail: data.contactEmail,
+        homePhone: data.contactPhone.replace(/\D/g, ''),
+        mobilePhone: data.contactPhone.replace(/\D/g, ''),
+        status: "Active",
+        priorityNote: formattedSelections
     };
 };
-
 
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { formName } = body;
 
+        // Common data for Make.com webhook
+        const makePayload = {
+            timestamp: new Date().toISOString(),
+            contact_info: {
+                name: body.contactName,
+                phone: body.contactPhone,
+                email: body.contactEmail,
+                location: body.locationText || 'Not provided'
+            },
+            lead_details: {
+                urgency: body.urgency,
+                payment: body.payment
+            },
+            metadata: body, // Send the whole form body
+        };
+
+        const makeWebhookUrl = process.env.MAKE_WEBHOOK_URL;
+        if (!makeWebhookUrl) {
+             console.error('Make.com Webhook URL is not configured.');
+             // Still try to submit to AxisCare if it's that form
+        }
+
         if (formName === 'Multi-Step Hero Form') {
-            // Route to AxisCare API
+            // This form goes to both AxisCare and Make.com
             const axisCareUrl = `${process.env.AXISCARE_BASE_URL}/leads`;
             const apiToken = process.env.AXISCARE_API_TOKEN;
             const apiVersion = process.env.AXISCARE_API_VERSION;
@@ -58,25 +85,46 @@ export async function POST(req: NextRequest) {
 
             const axisCareData = mapToAxisCareLead(body);
 
-            await axios.post(axisCareUrl, axisCareData, {
-                headers: {
-                    'Authorization': `Bearer ${apiToken}`,
-                    'axiscare-version': apiVersion,
-                    'Content-Type': 'application/json',
-                },
-            });
+            // Use Promise.all to send to both services concurrently
+            const [axisResponse, makeResponse] = await Promise.allSettled([
+                axios.post(axisCareUrl, axisCareData, {
+                    headers: {
+                        'Authorization': `Bearer ${apiToken}`,
+                        'axiscare-version': apiVersion,
+                        'Content-Type': 'application/json',
+                    },
+                }),
+                makeWebhookUrl ? axios.post(makeWebhookUrl, makePayload, { headers: { 'Content-Type': 'application/json' } }) : Promise.resolve({ status: 'skipped' })
+            ]);
 
-            return NextResponse.json({ success: true, message: 'Lead submitted to AxisCare successfully' }, { status: 200 });
+            const axisFailed = axisResponse.status === 'rejected';
+            const makeFailed = makeResponse.status === 'rejected';
+
+            if (axisFailed) {
+                 console.error('AxisCare submission failed:', axisResponse.reason?.response?.data || axisResponse.reason.message);
+            }
+             if (makeFailed) {
+                console.error('Make.com submission failed:', makeResponse.reason?.response?.data || makeResponse.reason.message);
+            }
+
+            if (axisFailed || makeFailed) {
+                 return NextResponse.json({ 
+                    success: false, 
+                    message: 'One or more submissions failed.',
+                    axisCareStatus: axisFailed ? 'Failed' : 'Success',
+                    makeComStatus: makeFailed ? 'Failed' : 'Success',
+                }, { status: 502 });
+            }
+
+            return NextResponse.json({ success: true, message: 'Lead submitted to AxisCare and Make.com successfully' }, { status: 200 });
 
         } else {
-            // Route to Make.com Webhook
-            const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-            if (!webhookUrl) {
-                console.error('Make.com Webhook URL is not configured.');
+            // Other forms (like Contact Form) only go to Make.com
+            if (!makeWebhookUrl) {
                 return NextResponse.json({ error: 'Server is not configured for this form submission.' }, { status: 500 });
             }
             
-            await axios.post(webhookUrl, body, {
+            await axios.post(makeWebhookUrl, body, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
@@ -89,7 +137,6 @@ export async function POST(req: NextRequest) {
             console.error('Axios error details:', error.response?.data);
             return NextResponse.json({ error: 'Failed to forward form data', details: error.response?.data }, { status: error.response?.status || 502 });
         }
-        // Log the full error object for non-Axios errors
         console.error(error);
         return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
     }

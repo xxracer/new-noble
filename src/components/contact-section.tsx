@@ -40,8 +40,13 @@ export function ContactSection() {
         }
         setLoading(true);
         try {
+            // This form only goes to Make.com as per the backend logic
             await axios.post('/api/submit-form', { ...form, formName: 'Contact Form' });
             setSubmitted(true);
+             toast({
+                title: "Thank You!",
+                description: "Your form has been submitted. We will be in touch shortly.",
+            });
         } catch (error) {
             console.error('Form submission error:', error);
             toast({

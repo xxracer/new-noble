@@ -49,10 +49,6 @@ const finalStepSchema = z.object({
 });
 
 type Step1Data = z.infer<typeof step1Schema>;
-type Step2Data = z.infer<typeof step2Schema>;
-type Step3Data = z.infer<typeof step3Schema>;
-type Step4Data = z.infer<typeof step4Schema>;
-type Step5Data = z.infer<typeof step5Schema>;
 type FinalStepData = z.infer<typeof finalStepSchema>;
 
 export function MultiStepForm({ initialLocation }: { initialLocation: string }) {
@@ -68,8 +64,6 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
     urgency: "",
     hours: "",
     payment: "",
-    isVeteran: "",
-    additionalServices: [],
     contactName: "",
     contactPhone: "",
     contactEmail: "",
@@ -80,11 +74,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
     isSelf: false,
   });
 
-  const step1Form = useForm<Step1Data>({ resolver: zodResolver(step1Schema) });
-  const step2Form = useForm<Step2Data>({ resolver: zodResolver(step2Schema) });
-  const step3Form = useForm<Step3Data>({ resolver: zodResolver(step3Schema) });
-  const step4Form = useForm<Step4Data>({ resolver: zodResolver(step4Schema) });
-  const step5Form = useForm<Step5Data>({ resolver: zodResolver(step5Schema) });
+  const step1Form = useForm<Step1Data>({ resolver: zodResolver(step1Schema), defaultValues: {zipcode: ''} });
   const finalForm = useForm<FinalStepData>({ resolver: zodResolver(finalStepSchema) });
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
@@ -112,8 +102,8 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
   const onStepSubmit = (step: number, field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if(step === 5) {
-      setCurrentStep(6);
-      setTimeout(() => setCurrentStep(7), 3000);
+      setCurrentStep(6); // Loading screen
+      setTimeout(() => setCurrentStep(7), 3000); // Final form
     } else {
       nextStep();
     }
@@ -121,7 +111,12 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
 
   const onFinalSubmit = async (data: FinalStepData) => {
     setLoading(true);
-    const fullFormData = { ...formData, ...data, formName: 'Multi-Step Hero Form' };
+    const fullFormData = { 
+        ...formData, 
+        ...data, 
+        formName: 'Multi-Step Hero Form',
+        locationText: locationText
+    };
     
     try {
       await axios.post('/api/submit-form', fullFormData);
@@ -130,6 +125,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
         title: "Thank you!",
         description: "We've received your information and will be in touch shortly.",
       });
+      // Gtag and FBQ events would be called here if configured
     } catch (error) {
       console.error('Form submission error:', error);
       toast({
@@ -160,7 +156,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                       <FormControl>
                         <Input placeholder="Enter ZIP code" {...field} className="flex-grow text-base h-12 text-gray-800" />
                       </FormControl>
-                      <Button type="submit" size="lg" className="h-12 bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+                      <Button type="submit" size="lg" className="h-12 bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading || field.value.length !== 5}>
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Find Care Near Me
                       </Button>
@@ -179,7 +175,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
           <div className="text-foreground">
             <h3 className="font-bold text-lg mb-2">Who Are You Searching For Care For?</h3>
             <p className="text-sm mb-4">Question 1 of 4</p>
-            <RadioGroup onValueChange={(value) => onStepSubmit(2, "relationship", value)} className="grid grid-cols-2 gap-4">
+            <RadioGroup onValueChange={(value) => handleSingleSelect("relationship", value)} className="grid grid-cols-2 gap-4">
                 {relationshipOptions.map(opt => (
                     <RadioGroupItem key={opt} value={opt} id={`rel-${opt}`} className="sr-only" />
                 ))}
@@ -191,6 +187,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
             </RadioGroup>
              <div className="mt-6 flex justify-between">
                 <Button variant="outline" onClick={prevStep}>Back</Button>
+                 <Button onClick={() => onStepSubmit(2, "relationship", formData.relationship)} disabled={!formData.relationship}>Continue</Button>
             </div>
           </div>
         );
@@ -201,7 +198,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
            <div className="text-foreground">
             <h3 className="font-bold text-lg mb-2">How Quickly Do You Need Care?</h3>
             <p className="text-sm mb-4">Question 2 of 4</p>
-            <RadioGroup onValueChange={(value) => onStepSubmit(3, "urgency", value)} className="grid grid-cols-2 gap-4">
+            <RadioGroup onValueChange={(value) => handleSingleSelect("urgency", value)} className="grid grid-cols-2 gap-4">
                 {urgencyOptions.map(opt => (
                     <RadioGroupItem key={opt} value={opt} id={`urg-${opt}`} className="sr-only" />
                 ))}
@@ -213,6 +210,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
             </RadioGroup>
              <div className="mt-6 flex justify-between">
                 <Button variant="outline" onClick={prevStep}>Back</Button>
+                <Button onClick={() => onStepSubmit(3, "urgency", formData.urgency)} disabled={!formData.urgency}>Continue</Button>
             </div>
           </div>
         );
@@ -223,7 +221,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
             <div className="text-foreground">
                 <h3 className="font-bold text-lg mb-2">Hours Needed Per Week</h3>
                 <p className="text-sm mb-4">Question 3 of 4</p>
-                <RadioGroup onValueChange={(value) => onStepSubmit(4, "hours", value)} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <RadioGroup onValueChange={(value) => handleSingleSelect("hours", value)} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {hoursOptions.map(opt => (
                         <RadioGroupItem key={opt} value={opt} id={`hr-${opt}`} className="sr-only" />
                     ))}
@@ -235,6 +233,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                 </RadioGroup>
                 <div className="mt-6 flex justify-between">
                     <Button variant="outline" onClick={prevStep}>Back</Button>
+                    <Button onClick={() => onStepSubmit(4, "hours", formData.hours)} disabled={!formData.hours}>Continue</Button>
                 </div>
             </div>
         );
@@ -245,7 +244,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
              <div className="text-foreground">
                 <h3 className="font-bold text-lg mb-2">How Do You Plan to Pay?</h3>
                 <p className="text-sm mb-4">Question 4 of 4</p>
-                <RadioGroup onValueChange={(value) => onStepSubmit(5, "payment", value)} className="grid grid-cols-2 gap-4">
+                <RadioGroup onValueChange={(value) => handleSingleSelect("payment", value)} className="grid grid-cols-2 gap-4">
                     {paymentOptions.map(opt => (
                         <RadioGroupItem key={opt} value={opt} id={`pay-${opt}`} className="sr-only" />
                     ))}
@@ -257,13 +256,14 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                 </RadioGroup>
                 <div className="mt-6 flex justify-between">
                     <Button variant="outline" onClick={prevStep}>Back</Button>
+                    <Button onClick={() => onStepSubmit(5, "payment", formData.payment)} disabled={!formData.payment}>Continue</Button>
                 </div>
             </div>
         );
       
       case 6:
         return (
-          <div className="flex flex-col items-center justify-center text-foreground p-8">
+          <div className="flex flex-col items-center justify-center text-foreground p-8 h-64">
             <Loader2 className="h-12 w-12 animate-spin text-accent" />
             <p className="mt-4 text-lg">Searching for options in your area...</p>
           </div>
@@ -282,9 +282,9 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                 <form onSubmit={finalForm.handleSubmit(onFinalSubmit)} className="space-y-4">
                     <h3 className="font-bold text-lg">Contact Information</h3>
                     <p className="text-sm text-muted-foreground">You are in: {locationText}</p>
-
+                    
                     <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-                        <FormField
+                         <FormField
                             control={finalForm.control}
                             name="careRecipientName"
                             render={({ field }) => (
@@ -296,16 +296,18 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                         <FormField
                             control={finalForm.control}
                             name="isSelf"
                             render={({ field }) => (
-                                <FormItem className="flex items-center space-x-2 pt-2 sm:pt-0">
+                                <FormItem className="flex items-center space-x-2 pt-2 sm:pt-0 shrink-0">
                                      <FormControl>
                                         <Checkbox checked={field.value} onCheckedChange={(checked) => {
-                                            field.onChange(checked);
-                                            if (checked) {
-                                                finalForm.setValue('careRecipientName', finalForm.getValues('contactName'));
+                                            const isChecked = !!checked;
+                                            field.onChange(isChecked);
+                                            const contactName = finalForm.getValues('contactName');
+                                            if (isChecked && contactName) {
+                                                finalForm.setValue('careRecipientName', contactName);
                                             }
                                         }}/>
                                     </FormControl>

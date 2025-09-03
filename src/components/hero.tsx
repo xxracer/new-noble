@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { MultiStepForm } from '@/components/multi-step-form';
 
 export function Hero() {
-  const [location, setLocation] = useState("your city, TX");
+  const [location, setLocation] = useState("your area");
 
   useEffect(() => {
-    const fetchLocation = async () => {
+    const fetchExactLocation = async () => {
       try {
         if ('geolocation' in navigator) {
           navigator.geolocation.getCurrentPosition(
@@ -19,40 +19,40 @@ export function Hero() {
                 );
                 if (response.ok) {
                   const data = await response.json();
-                  const city = data.locality || data.city;
-                  const state = data.principalSubdivisionCode ? data.principalSubdivisionCode.replace('US-','') : 'TX';
-                  if (city && state) {
-                    setLocation(`${city}, ${state}`);
+                  const city = data.locality || data.city || data.principalSubdivision;
+                  if (city) {
+                    setLocation(city);
+                    return;
                   }
                 }
               } catch (error) {
-                console.error('Error getting location from reverse geocoding:', error);
-                // Fallback to IP-based location
-                fetchLocationFromIp();
+                console.error('Error getting location from reverse geocoding, falling back to IP.', error);
               }
+              // If reverse geocoding fails, fallback to IP
+              fallbackToIPLocation();
             },
-            (error) => {
-              console.warn(`Geolocation error (${error.code}): ${error.message}`);
-              fetchLocationFromIp();
+            (geoError) => {
+              console.warn(`Geolocation error (${geoError.code}): ${geoError.message}, falling back to IP.`);
+              fallbackToIPLocation();
             },
-            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
           );
         } else {
-          fetchLocationFromIp();
+          fallbackToIPLocation();
         }
       } catch (error) {
-        console.error('Error in fetchLocation:', error);
-        fetchLocationFromIp();
+        console.error('Error in fetchExactLocation:', error);
+        fallbackToIPLocation();
       }
     };
     
-    const fetchLocationFromIp = async () => {
+    const fallbackToIPLocation = async () => {
         try {
             const response = await fetch('/api/get-location-data');
              if (response.ok) {
                  const data = await response.json();
-                 if (data.city && data.region) {
-                     setLocation(`${data.city}, ${data.region}`);
+                 if (data.derivedLocationString) {
+                     setLocation(data.derivedLocationString);
                  }
              }
         } catch (error) {
@@ -60,7 +60,7 @@ export function Hero() {
         }
     };
 
-    fetchLocation();
+    fetchExactLocation();
   }, []);
 
   return (
