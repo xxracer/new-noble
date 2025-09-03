@@ -2,16 +2,21 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck, Users, HeartHandshake } from 'lucide-react';
+import { ShieldCheck, Users, HeartHandshake, Loader2 } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+
 
 export function ContactSection() {
+    const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [finalForm, setFinalForm] = useState({
+    const { toast } = useToast();
+    const [form, setForm] = useState({
         careRecipientName: '',
         zipcode: '',
         contactName: '',
@@ -22,17 +27,31 @@ export function ContactSection() {
         additionalInfo: '',
         isSelf: false,
     });
-    const [errors, setErrors] = useState<any>({});
-
-
-    const handleSubmit = (e: React.FormEvent) => {
+    
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!finalForm.contactName || !finalForm.contactPhone || !finalForm.contactEmail) {
-            alert('Please fill out all required fields.');
+        if (!form.contactName || !form.contactPhone || !form.contactEmail) {
+            toast({
+                title: "Error",
+                description: "Please fill out all required fields.",
+                variant: "destructive",
+            });
             return;
         }
-        console.log('Form submitted:', finalForm);
-        setSubmitted(true);
+        setLoading(true);
+        try {
+            await axios.post('/api/submit-form', { ...form, formName: 'Contact Form' });
+            setSubmitted(true);
+        } catch (error) {
+            console.error('Form submission error:', error);
+            toast({
+                title: "Submission Error",
+                description: "There was an error submitting your form. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -100,14 +119,14 @@ export function ContactSection() {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <h2 className="text-2xl font-bold text-center mb-4 text-foreground">Get Free Help</h2>
                             
-                            <Input type="text" placeholder="Name of person needing care" value={finalForm.careRecipientName} onChange={(e) => setFinalForm({ ...finalForm, careRecipientName: e.target.value })} disabled={finalForm.isSelf} />
-                            <Input type="text" placeholder="Zip code" value={finalForm.zipcode} onChange={(e) => setFinalForm({ ...finalForm, zipcode: e.target.value })} />
-                            <Input type="text" placeholder="Contact Name (First and Last Name)" required value={finalForm.contactName} onChange={(e) => setFinalForm({ ...finalForm, contactName: e.target.value })} />
-                            <Input type="tel" placeholder="Contact Phone Number" required value={finalForm.contactPhone} onChange={(e) => setFinalForm({ ...finalForm, contactPhone: e.target.value })} />
-                            <Input type="email" placeholder="Contact Email" required value={finalForm.contactEmail} onChange={(e) => setFinalForm({ ...finalForm, contactEmail: e.target.value })} />
+                            <Input type="text" placeholder="Name of person needing care" value={form.careRecipientName} onChange={(e) => setForm({ ...form, careRecipientName: e.target.value })} disabled={form.isSelf} />
+                            <Input type="text" placeholder="Zip code" value={form.zipcode} onChange={(e) => setForm({ ...form, zipcode: e.target.value })} />
+                            <Input type="text" placeholder="Contact Name (First and Last Name)" required value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
+                            <Input type="tel" placeholder="Contact Phone Number" required value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} />
+                            <Input type="email" placeholder="Contact Email" required value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} />
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <Select onValueChange={(value) => setFinalForm({ ...finalForm, bestTime: value })}>
+                                <Select onValueChange={(value) => setForm({ ...form, bestTime: value })}>
                                     <SelectTrigger><SelectValue placeholder="Best time to contact?" /></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="morning">Morning (8AM-12PM)</SelectItem>
@@ -116,7 +135,7 @@ export function ContactSection() {
                                     </SelectContent>
                                 </Select>
 
-                                <Select onValueChange={(value) => setFinalForm({ ...finalForm, contactMethod: value })}>
+                                <Select onValueChange={(value) => setForm({ ...form, contactMethod: value })}>
                                     <SelectTrigger><SelectValue placeholder="Contact method?" /></SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="phone">Phone Call</SelectItem>
@@ -128,10 +147,13 @@ export function ContactSection() {
 
                             <div>
                                 <h4 className="text-sm font-medium mb-2 text-foreground">Is there anything else we should know?</h4>
-                                <Textarea placeholder="Example: Please contact me on Monday afternoon" value={finalForm.additionalInfo} onChange={(e) => setFinalForm({ ...finalForm, additionalInfo: e.target.value })} />
+                                <Textarea placeholder="Example: Please contact me on Monday afternoon" value={form.additionalInfo} onChange={(e) => setForm({ ...form, additionalInfo: e.target.value })} />
                             </div>
 
-                            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">Get Quick Assistance</Button>
+                            <Button type="submit" className="w-full bg-accent hover:bg-accent/90" disabled={loading}>
+                                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                Get Quick Assistance
+                            </Button>
 
                             <div className="text-xs text-muted-foreground space-y-2 pt-2">
                                 <p>By submitting this form, you consent to Noble Health contacting you via phone call, text message, and email using the information provided. Standard message and data rates may apply.</p>

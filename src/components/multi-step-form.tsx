@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -121,19 +121,25 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
 
   const onFinalSubmit = async (data: FinalStepData) => {
     setLoading(true);
-    const fullFormData = { ...formData, ...data };
-    // Here you would integrate with your API (AxisCare, Make.com etc.)
-    console.log("Submitting final form data:", fullFormData);
+    const fullFormData = { ...formData, ...data, formName: 'Multi-Step Hero Form' };
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    setLoading(false);
-    setSubmitted(true);
-    toast({
-      title: "Thank you!",
-      description: "We've received your information and will be in touch shortly.",
-    });
+    try {
+      await axios.post('/api/submit-form', fullFormData);
+      setSubmitted(true);
+      toast({
+        title: "Thank you!",
+        description: "We've received your information and will be in touch shortly.",
+      });
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+          title: "Submission Error",
+          description: "There was an error submitting your form. Please try again.",
+          variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   
   const renderStep = () => {
