@@ -302,7 +302,12 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                             render={({ field }) => (
                                 <FormItem className="flex items-center space-x-2 pt-2 sm:pt-0">
                                      <FormControl>
-                                        <Checkbox checked={field.value} onCheckedChange={field.onChange}/>
+                                        <Checkbox checked={field.value} onCheckedChange={(checked) => {
+                                            field.onChange(checked);
+                                            if (checked) {
+                                                finalForm.setValue('careRecipientName', finalForm.getValues('contactName'));
+                                            }
+                                        }}/>
                                     </FormControl>
                                     <FormLabel>For myself</FormLabel>
                                 </FormItem>
@@ -310,7 +315,12 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                         />
                     </div>
                     
-                    <FormField control={finalForm.control} name="contactName" render={({ field }) => (<FormItem><FormControl><Input placeholder="Contact Name (First and Last Name)" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                    <FormField control={finalForm.control} name="contactName" render={({ field }) => (<FormItem><FormControl><Input placeholder="Contact Name (First and Last Name)" {...field} onChange={(e) => {
+                        field.onChange(e);
+                        if(finalForm.getValues('isSelf')) {
+                            finalForm.setValue('careRecipientName', e.target.value);
+                        }
+                    }} /></FormControl><FormMessage /></FormItem>)} />
                     <FormField control={finalForm.control} name="contactPhone" render={({ field }) => (<FormItem><FormControl><Input type="tel" placeholder="Contact Phone Number" {...field} /></FormControl><FormMessage /></FormItem>)} />
                     <FormField control={finalForm.control} name="contactEmail" render={({ field }) => (<FormItem><FormControl><Input type="email" placeholder="Contact Email" {...field} /></FormControl><FormMessage /></FormItem>)} />
 
