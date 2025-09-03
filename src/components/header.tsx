@@ -1,0 +1,88 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, Phone } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Logo } from "@/components/logo";
+
+const navLinks = [
+  { href: "#", label: "Home" },
+  { href: "#services", label: "Services" },
+  { href: "#areas", label: "Areas We Serve" },
+  { href: "#blog", label: "Blog" },
+  { href: "#work", label: "Work with Us" },
+];
+
+export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center">
+        <Link href="/" className="mr-6 flex items-center">
+          <Logo />
+        </Link>
+        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex flex-1 items-center justify-end gap-2 sm:gap-4">
+          <Button variant="outline" className="hidden sm:inline-flex" asChild>
+            <a href="tel:+1234567890">
+              <Phone className="mr-2 h-4 w-4" />
+              Call Us
+            </a>
+          </Button>
+          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Free Care Consultation</Button>
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                className="md:hidden"
+                size="icon"
+                aria-label="Toggle menu"
+              >
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <div className="px-2 py-6">
+                <Link href="/" className="mb-6 flex items-center" onClick={() => setIsOpen(false)}>
+                  <Logo />
+                </Link>
+                <nav className="grid gap-4">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="text-lg font-medium text-foreground/80 hover:text-foreground"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+                <Button variant="outline" className="mt-6 w-full" asChild>
+                  <a href="tel:+1234567890">
+                    <Phone className="mr-2 h-4 w-4" />
+                    Call Us
+                  </a>
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
