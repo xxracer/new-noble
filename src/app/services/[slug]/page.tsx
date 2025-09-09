@@ -3,7 +3,7 @@ import { generateServiceDetails, ServiceDetailsOutput } from "@/ai/flows/service
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, AlertTriangle } from "lucide-react";
 import { services } from "@/data/services";
 import Image from "next/image";
 import {
@@ -12,6 +12,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export async function generateStaticParams() {
     return services.map((service) => ({
@@ -35,15 +36,17 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   }
 
   let serviceDetails: ServiceDetailsOutput | null = null;
+  let aiError = false;
   try {
     serviceDetails = await generateServiceDetails(serviceInfo.title);
   } catch (error) {
-    console.error("AI service failed, using fallback content:", error);
+    console.error(`AI service failed for "${serviceInfo.title}":`, error);
+    aiError = true;
     // Fallback content if AI fails
     serviceDetails = {
         slogan: `Quality ${serviceInfo.title} You Can Trust`,
         description: serviceInfo.points.join('\n\n'), // Use points as a fallback description
-        benefits: [], // Or provide some static benefits
+        benefits: [],
         faq: [],
     };
   }
@@ -78,6 +81,15 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                     <h2 className="font-headline text-3xl font-bold text-foreground">
                         Comprehensive {serviceInfo.title}
                     </h2>
+                    {aiError && (
+                         <Alert variant="destructive">
+                            <AlertTriangle className="h-4 w-4" />
+                            <AlertTitle>AI Content Failed</AlertTitle>
+                            <AlertDescription>
+                                The AI-generated content could not be loaded. Displaying default information.
+                            </AlertDescription>
+                        </Alert>
+                    )}
                     <div className="text-lg text-muted-foreground whitespace-pre-wrap">
                         {serviceDetails.description.split('\n\n').map((paragraph, i) => (
                             <p key={i} className={i > 0 ? 'mt-4' : ''}>{paragraph}</p>
