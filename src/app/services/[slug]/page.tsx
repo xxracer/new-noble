@@ -28,7 +28,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
     );
   }
 
-  const serviceDetails = await generateServiceDetails(serviceInfo.name);
+  const serviceDetails = await generateServiceDetails(serviceInfo.title);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -59,9 +59,11 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                     <h2 className="font-headline text-3xl font-bold text-foreground">
                         Comprehensive {serviceInfo.title}
                     </h2>
-                    <p className="text-lg text-muted-foreground whitespace-pre-wrap">
-                        {serviceDetails.description}
-                    </p>
+                    <div className="text-lg text-muted-foreground whitespace-pre-wrap">
+                        {serviceDetails.description.split('\n\n').map((paragraph, i) => (
+                            <p key={i} className={i > 0 ? 'mt-4' : ''}>{paragraph}</p>
+                        ))}
+                    </div>
                 </div>
                 <div className="bg-secondary p-8 rounded-lg shadow-lg">
                     <h3 className="font-headline text-2xl font-bold text-foreground mb-6">
