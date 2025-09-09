@@ -11,22 +11,20 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { services } from "@/data/services";
-import { PersonStanding, Clock, Brain, Activity, HeartPulse, HandHeart, Users, Shield, Star } from "lucide-react";
+import { PersonStanding, Clock, Brain, Activity, HeartPulse, HandHeart, Users, Shield, Star, Home, Car, Utensils, Pill, Stethoscope, HandHelping, ShoppingCart, House, HeartHandshake } from "lucide-react";
 
 // Map string names to Lucide components
 const iconMap: { [key: string]: React.ComponentType<any> } = {
-  "Support for Veterans": Star,
-  "Elderly Care": HandHeart,
-  "Recovery Care": Activity,
-  "Specialized Care": Brain,
-  "Respite Care": Clock,
-  "24/7 Care": HeartPulse,
-  "Personal Care": PersonStanding,
-  "Companion Care": Users,
-  "Post-Operative Care": Activity,
-  "Alzheimer's & Dementia": Brain,
-  "Chronic Illness Care": HeartPulse,
-  "End-of-Life Care": HandHeart,
+    "Personal Care": HandHeart,
+    "Companionship": Users,
+    "Meal Preparation": Utensils,
+    "Medication Reminders": Pill,
+    "Mobility & Fall Prevention": HandHelping,
+    "Light Housekeeping": Home,
+    "Errands & Transportation": ShoppingCart,
+    "Family Respite": Clock,
+    "Live-in Care": HeartHandshake,
+    "Alzheimer’s & Dementia Care": Brain,
 };
 
 
