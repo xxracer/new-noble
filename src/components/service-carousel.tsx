@@ -10,21 +10,29 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { PersonStanding, Clock, Brain, Activity, HeartPulse, HandHeart, Users } from "lucide-react";
+import { services } from "@/data/services";
+import { PersonStanding, Clock, Brain, Activity, HeartPulse, HandHeart, Users, Shield, Star } from "lucide-react";
 
-const services = [
-  { name: "Personal Care", icon: PersonStanding, href: "#" },
-  { name: "Respite Care", icon: Clock, href: "#" },
-  { name: "Alzheimer's & Dementia", icon: Brain, href: "#" },
-  { name: "Post-Operative Care", icon: Activity, href: "#" },
-  { name: "Chronic Illness Care", icon: HeartPulse, href: "#" },
-  { name: "End-of-Life Care", icon: HandHeart, href: "#" },
-  { name: "Companion Care", icon: Users, href: "#" },
-];
+// Map string names to Lucide components
+const iconMap: { [key: string]: React.ComponentType<any> } = {
+  "Support for Veterans": Star,
+  "Elderly Care": HandHeart,
+  "Recovery Care": Activity,
+  "Specialized Care": Brain,
+  "Respite Care": Clock,
+  "24/7 Care": HeartPulse,
+  "Personal Care": PersonStanding,
+  "Companion Care": Users,
+  "Post-Operative Care": Activity,
+  "Alzheimer's & Dementia": Brain,
+  "Chronic Illness Care": HeartPulse,
+  "End-of-Life Care": HandHeart,
+};
+
 
 export function ServiceCarousel() {
   const plugin = React.useRef(
-    Autoplay({ delay: 1000, stopOnInteraction: true })
+    Autoplay({ delay: 2000, stopOnInteraction: true })
   );
 
   return (
@@ -46,15 +54,15 @@ export function ServiceCarousel() {
         >
           <CarouselContent>
             {services.map((service, index) => {
-              const Icon = service.icon;
+              const Icon = iconMap[service.title] || Shield;
               return(
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
-                <Link href={service.href} className="block group">
+                <Link href={`/services/${service.slug}`} className="block group">
                     <div className="p-1">
                     <Card>
                         <CardContent className="flex flex-col items-center justify-center p-6 gap-4 aspect-square transition-colors group-hover:bg-primary/5">
                             <Icon className="h-12 w-12 text-primary transition-transform group-hover:scale-110" />
-                            <span className="text-lg font-semibold text-center font-headline">{service.name}</span>
+                            <span className="text-lg font-semibold text-center font-headline">{service.title}</span>
                         </CardContent>
                     </Card>
                     </div>
