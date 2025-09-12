@@ -1,9 +1,8 @@
 
-import { generateServiceDetails, ServiceDetailsOutput } from "@/ai/flows/service-details";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { services } from "@/data/services";
 import Image from "next/image";
 import {
@@ -12,7 +11,7 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
     return services.map((service) => ({
@@ -24,33 +23,8 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   const serviceInfo = services.find(s => s.slug === params.slug);
 
   if (!serviceInfo) {
-    return (
-      <div>
-        <Header />
-        <main className="container py-12">
-          <h1 className="text-2xl font-bold">Service not found</h1>
-        </main>
-        <Footer />
-      </div>
-    );
+    notFound();
   }
-
-  let serviceDetails: ServiceDetailsOutput | null = null;
-  let aiError = false;
-  try {
-    serviceDetails = await generateServiceDetails(serviceInfo.title);
-  } catch (error) {
-    console.error(`AI service failed for "${serviceInfo.title}":`, error);
-    aiError = true;
-    // Fallback content if AI fails
-    serviceDetails = {
-        slogan: `Quality ${serviceInfo.title} You Can Trust`,
-        description: serviceInfo.points.join('\n\n'), // Use points as a fallback description
-        benefits: [],
-        faq: [],
-    };
-  }
-
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -70,7 +44,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           <div className="container relative z-10 text-center">
             <Badge variant="secondary" className="mb-4 text-sm">{serviceInfo.title}</Badge>
             <h1 className="font-headline text-4xl sm:text-6xl font-bold tracking-tight">
-              {serviceDetails.slogan}
+              {serviceInfo.slogan}
             </h1>
           </div>
         </section>
@@ -81,28 +55,19 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                     <h2 className="font-headline text-3xl font-bold text-foreground">
                         Comprehensive {serviceInfo.title}
                     </h2>
-                    {aiError && (
-                         <Alert variant="destructive">
-                            <AlertTriangle className="h-4 w-4" />
-                            <AlertTitle>AI Content Failed</AlertTitle>
-                            <AlertDescription>
-                                The AI-generated content could not be loaded. Displaying default information.
-                            </AlertDescription>
-                        </Alert>
-                    )}
                     <div className="text-lg text-muted-foreground whitespace-pre-wrap">
-                        {serviceDetails.description.split('\n\n').map((paragraph, i) => (
+                        {serviceInfo.longDescription.split('\n\n').map((paragraph, i) => (
                             <p key={i} className={i > 0 ? 'mt-4' : ''}>{paragraph}</p>
                         ))}
                     </div>
                 </div>
-                {serviceDetails.benefits && serviceDetails.benefits.length > 0 && (
+                {serviceInfo.benefits && serviceInfo.benefits.length > 0 && (
                     <div className="bg-secondary p-8 rounded-lg shadow-lg">
                         <h3 className="font-headline text-2xl font-bold text-foreground mb-6">
                             Key Benefits
                         </h3>
                         <ul className="space-y-4">
-                            {serviceDetails.benefits.map((benefit, index) => (
+                            {serviceInfo.benefits.map((benefit, index) => (
                                 <li key={index} className="flex items-start gap-3">
                                     <CheckCircle className="h-6 w-6 text-accent mt-1 shrink-0" />
                                     <div>
@@ -117,14 +82,14 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             </div>
         </section>
 
-        {serviceDetails.faq && serviceDetails.faq.length > 0 && (
+        {serviceInfo.faq && serviceInfo.faq.length > 0 && (
             <section className="py-20 sm:py-28 bg-secondary">
                 <div className="container max-w-4xl mx-auto">
                     <h2 className="font-headline text-3xl font-bold text-center mb-12 text-foreground">
                         Frequently Asked Questions
                     </h2>
                     <Accordion type="single" collapsible className="w-full">
-                        {serviceDetails.faq.map((item, index) => (
+                        {serviceInfo.faq.map((item, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
                                 <AccordionTrigger className="text-lg font-semibold text-left">{item.question}</AccordionTrigger>
                                 <AccordionContent className="text-base text-muted-foreground">
