@@ -17,7 +17,7 @@ export default function Home() {
           <InfoCards />
         </div>
         <ConsultationBanner />
-        <div id="contact-shortlink">
+        <div id="blog">
          <ContactSection />
         </div>
         <AreasWeServe />

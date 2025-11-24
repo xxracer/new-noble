@@ -12,7 +12,7 @@ import styles from './header.module.css';
 const navLinks = [
   { href: "/#services", label: "Services" },
   { href: "/#areas-we-serve", label: "Areas We Serve" },
-  { href: "/#contact-shortlink", label: "Blog" },
+  { href: "/#blog", label: "Blog" },
   { href: "#", label: "Work with Us" },
 ];
 
