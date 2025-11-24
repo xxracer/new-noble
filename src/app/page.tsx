@@ -13,9 +13,13 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <InfoCards />
+        <div id="services">
+          <InfoCards />
+        </div>
         <ConsultationBanner />
-        <ContactSection />
+        <div id="contact-shortlink">
+         <ContactSection />
+        </div>
         <AreasWeServe />
         <ServiceCarousel />
       </main>

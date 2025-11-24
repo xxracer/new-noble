@@ -10,9 +10,9 @@ import { Logo } from "@/components/logo";
 import styles from './header.module.css';
 
 const navLinks = [
-  { href: "#", label: "Services" },
-  { href: "#areas-we-serve", label: "Areas We Serve" },
-  { href: "#", label: "Blog" },
+  { href: "/#services", label: "Services" },
+  { href: "/#areas-we-serve", label: "Areas We Serve" },
+  { href: "/#contact-shortlink", label: "Blog" },
   { href: "#", label: "Work with Us" },
 ];
 
