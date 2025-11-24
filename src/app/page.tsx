@@ -17,9 +17,7 @@ export default function Home() {
           <InfoCards />
         </div>
         <ConsultationBanner />
-        <div id="blog">
-         <ContactSection />
-        </div>
+        <ContactSection />
         <AreasWeServe />
         <ServiceCarousel />
       </main>
