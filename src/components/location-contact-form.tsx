@@ -78,7 +78,7 @@ export function LocationContactForm() {
             <form onSubmit={handleSubmit} className="space-y-4">
                 <h2 className="text-2xl font-bold text-center mb-4 text-foreground">Get Free Help</h2>
                 
-                <Input type="text" placeholder="Name of person needing care" value={form.careRecipientName} onChange={(e) => setForm({ ...form, careRecipientName: e.target.value })} disabled={form.isSelf} />
+                <Input type="text" placeholder="Name of person needing care" value={form.careRecipientName} onChange={(e) => setForm({ ...form, careRecipientName: e.target.value })} />
                 <Input type="text" placeholder="Zip code" value={form.zipcode} onChange={(e) => setForm({ ...form, zipcode: e.target.value })} />
                 <Input type="text" placeholder="Contact Name (First and Last Name)" required value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} />
                 <Input type="tel" placeholder="Contact Phone Number" required value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} />
