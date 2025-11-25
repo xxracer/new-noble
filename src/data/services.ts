@@ -114,7 +114,7 @@ export const services: Service[] = [
         title: "Medication Reminders",
         description: "Ensuring medications are taken on time, every time.",
         icon: "Pill",
-        bgImage: "https://picsum.photos/seed/medication/1200/800",
+        bgImage: "https://static.wixstatic.com/media/c5947c_f4f605dc3983421ab797daf25a6475d2~mv2.jpg",
         dataAiHint: "medication reminder",
         points: [
             "Timely reminders to take prescribed medications.",
