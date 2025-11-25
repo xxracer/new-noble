@@ -26,10 +26,7 @@ export default async function LocationPage({ params }: { params: { location: str
             In-Home Care in {location.name}
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-            <div>
-              <h2 className="font-headline text-2xl font-bold mb-6">Request Information</h2>
-              <LocationContactForm />
-            </div>
+            <LocationContactForm />
             <div className="h-full w-full min-h-[450px] md:min-h-full">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d525498.5717543017!2d-95.7949976148979!3d29.83477444036334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640c5c9274a9745%3A0xd5432a5038eb09b!2sNoble%20Health%20inc!5e1!3m2!1ses!2sve!4v1764044803153!5m2!1ses!2sve"
