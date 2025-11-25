@@ -2,21 +2,8 @@
 
 import { MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const locations = [
-  "Harris County",
-  "The Woodlands",
-  "Sugar Land",
-  "Katy",
-  "Cypress",
-  "Pearland",
-  "Friendswood",
-  "League City",
-  "Clear Lake",
-  "Galveston",
-  "Conroe",
-  "Montgomery",
-];
+import { locations } from "@/data/locations";
+import Link from "next/link";
 
 export function AreasWeServe() {
   return (
@@ -32,16 +19,17 @@ export function AreasWeServe() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {locations.map((location) => (
-            <Card key={location} className="group overflow-hidden rounded-lg border-2 border-border hover:border-primary hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-                <MapPin className="h-8 w-8 mb-3 text-primary/80 group-hover:text-primary transition-colors duration-300" />
-                <span className="font-semibold text-foreground text-base">{location}</span>
-              </CardContent>
-            </Card>
+            <Link href={`/areas-we-serve/${location.slug}`} key={location.slug} className="group block">
+              <Card className="h-full overflow-hidden rounded-lg border-2 border-border hover:border-primary hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
+                  <MapPin className="h-8 w-8 mb-3 text-primary/80 group-hover:text-primary transition-colors duration-300" />
+                  <span className="font-semibold text-foreground text-base">{location.name}</span>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
     </section>
   );
 }
-    
