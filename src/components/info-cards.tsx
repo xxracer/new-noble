@@ -8,7 +8,7 @@ const cardData = [
     description: "See if you qualify for any VA directed program",
     services: ["Assistance with VA programs", "Veteran-Directed Care (VDC)", "Up to $4500 monthly in assistance"],
     icon: "M12 2l2.5 7.5h7.5l-6 4.5 2.5 7.5-6-4.5-6 4.5 2.5-7.5-6-4.5h7.5z",
-    bgImage: "https://picsum.photos/seed/veterans/600/400",
+    bgImage: "https://static.wixstatic.com/media/c5947c_58a96d5405fe4286813ac0de1473d489~mv2.png",
     dataAiHint: "veterans support"
   },
   {
