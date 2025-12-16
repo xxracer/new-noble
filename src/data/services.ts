@@ -141,7 +141,7 @@ export const services: Service[] = [
         title: "Mobility & Fall Prevention",
         description: "Walking assistance, safe transfers, and fall prevention.",
         icon: "HandHelping",
-        bgImage: "https://picsum.photos/seed/mobility/1200/800",
+        bgImage: "https://static.wixstatic.com/media/c5947c_2bb4b6f0e53744bfb1e9e244742d3b1b~mv2.jpg",
         dataAiHint: "mobility assistance",
         points: [
             "Providing steady support during walks and movement.",
@@ -168,7 +168,7 @@ export const services: Service[] = [
         title: "Light Housekeeping",
         description: "Light cleaning, laundry, and organized living spaces.",
         icon: "Home",
-        bgImage: "https://picsum.photos/seed/housekeeping/1200/800",
+        bgImage: "https://static.wixstatic.com/media/c5947c_f591e1b5da7a46f394c536af57e882ac~mv2.jpg",
         dataAiHint: "light housekeeping",
         points: [
             "Keeping living areas tidy, clean, and safe.",
@@ -195,7 +195,7 @@ export const services: Service[] = [
         title: "Errands & Transportation",
         description: "Grocery shopping, pharmacy pick-ups, and medical appointments.",
         icon: "ShoppingCart",
-        bgImage: "https://picsum.photos/seed/errands/1200/800",
+        bgImage: "https://static.wixstatic.com/media/c5947c_c8b4dd88e5684ccb82c875218d922354~mv2.jpg",
         dataAiHint: "transportation errands",
         points: [
             "Reliable transportation to and from medical appointments.",

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -75,7 +76,19 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
   });
 
   const step1Form = useForm<Step1Data>({ resolver: zodResolver(step1Schema), defaultValues: {zipcode: ''} });
-  const finalForm = useForm<FinalStepData>({ resolver: zodResolver(finalStepSchema), defaultValues: { contactName: '', contactEmail: '', contactPhone: '' } });
+  const finalForm = useForm<FinalStepData>({ 
+      resolver: zodResolver(finalStepSchema), 
+      defaultValues: { 
+          contactName: '', 
+          contactEmail: '', 
+          contactPhone: '',
+          careRecipientName: '',
+          bestTime: '',
+          contactMethod: '',
+          additionalInfo: '',
+          isSelf: false
+      } 
+  });
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
@@ -389,5 +402,3 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
     </Card>
   );
 }
-
-    
