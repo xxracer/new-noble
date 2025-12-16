@@ -50,81 +50,68 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { formName } = body;
 
-        // Common data for Make.com webhook
+        const makeWebhookUrl = process.env.MAKE_WEBHOOK_URL;
         const makePayload = {
             timestamp: new Date().toISOString(),
-            contact_info: {
-                name: body.contactName,
-                phone: body.contactPhone,
-                email: body.contactEmail,
-                location: body.locationText || 'Not provided'
-            },
-            lead_details: {
-                urgency: body.urgency,
-                payment: body.payment
-            },
-            metadata: body, // Send the whole form body
+            form_name: formName,
+            ...body,
         };
 
-        const makeWebhookUrl = process.env.MAKE_WEBHOOK_URL;
-        if (!makeWebhookUrl) {
-             console.error('Make.com Webhook URL is not configured.');
-             // Still try to submit to AxisCare if it's that form
-        }
-
         if (formName === 'Multi-Step Hero Form') {
-            // This form goes to both AxisCare and Make.com
             const axisCareUrl = `${process.env.AXISCARE_BASE_URL}/leads`;
             const apiToken = process.env.AXISCARE_API_TOKEN;
             const apiVersion = process.env.AXISCARE_API_VERSION;
 
-            if (!axisCareUrl || !apiToken || !apiVersion) {
-                console.error('AxisCare environment variables are not configured.');
-                return NextResponse.json({ error: 'Server is not configured for AxisCare submissions.' }, { status: 500 });
+            let axisCareSuccess = false;
+            if (axisCareUrl && apiToken && apiVersion) {
+                try {
+                    const axisCareData = mapToAxisCareLead(body);
+                    await axios.post(axisCareUrl, axisCareData, {
+                        headers: {
+                            'Authorization': `Bearer ${apiToken}`,
+                            'axiscare-version': apiVersion,
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    axisCareSuccess = true;
+                } catch (axisError) {
+                    console.error('AxisCare submission failed:', axios.isAxiosError(axisError) ? axisError.response?.data : axisError);
+                }
+            } else {
+                console.warn('AxisCare environment variables are not fully configured.');
             }
 
-            const axisCareData = mapToAxisCareLead(body);
-
-            // Use Promise.all to send to both services concurrently
-            const [axisResponse, makeResponse] = await Promise.allSettled([
-                axios.post(axisCareUrl, axisCareData, {
-                    headers: {
-                        'Authorization': `Bearer ${apiToken}`,
-                        'axiscare-version': apiVersion,
-                        'Content-Type': 'application/json',
-                    },
-                }),
-                makeWebhookUrl ? axios.post(makeWebhookUrl, makePayload, { headers: { 'Content-Type': 'application/json' } }) : Promise.resolve({ status: 'skipped' })
-            ]);
-
-            const axisFailed = axisResponse.status === 'rejected';
-            const makeFailed = makeResponse.status === 'rejected';
-
-            if (axisFailed) {
-                 console.error('AxisCare submission failed:', axisResponse.reason?.response?.data || axisResponse.reason.message);
+            // Always try to submit to Make.com as a fallback/secondary
+            if (makeWebhookUrl) {
+                try {
+                    await axios.post(makeWebhookUrl, makePayload);
+                    // If AxisCare failed but Make.com succeeded, we consider it a success for the user.
+                    return NextResponse.json({ success: true, message: 'Lead captured successfully.' }, { status: 200 });
+                } catch (makeError) {
+                    console.error('Make.com submission failed after AxisCare attempt:', axios.isAxiosError(makeError) ? makeError.response?.data : makeError);
+                    // If both fail, return an error
+                    if (!axisCareSuccess) {
+                        return NextResponse.json({ error: 'All lead submission services failed.' }, { status: 502 });
+                    }
+                }
             }
-             if (makeFailed) {
-                console.error('Make.com submission failed:', makeResponse.reason?.response?.data || makeResponse.reason.message);
+            
+            // If only AxisCare succeeded (and no Make URL)
+            if (axisCareSuccess) {
+                 return NextResponse.json({ success: true, message: 'Lead submitted to AxisCare successfully.' }, { status: 200 });
             }
 
-            if (axisFailed || makeFailed) {
-                 return NextResponse.json({ 
-                    success: false, 
-                    message: 'One or more submissions failed.',
-                    axisCareStatus: axisFailed ? 'Failed' : 'Success',
-                    makeComStatus: makeFailed ? 'Failed' : 'Success',
-                }, { status: 502 });
-            }
-
-            return NextResponse.json({ success: true, message: 'Lead submitted to AxisCare and Make.com successfully' }, { status: 200 });
+            // If we are here, it means AxisCare failed and there was no Make.com URL
+            return NextResponse.json({ error: 'Lead submission to primary service failed and no fallback is configured.' }, { status: 500 });
 
         } else {
             // Other forms (like Contact Form) only go to Make.com
             if (!makeWebhookUrl) {
-                return NextResponse.json({ error: 'Server is not configured for this form submission.' }, { status: 500 });
+                 console.error('Make.com Webhook URL is not configured for this form.');
+                 return NextResponse.json({ error: 'Server is not configured for this form submission.' }, { status: 500 });
             }
             
-            await axios.post(makeWebhookUrl, body, {
+            await axios.post(makeWebhookUrl, makePayload, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
@@ -132,12 +119,7 @@ export async function POST(req: NextRequest) {
         }
 
     } catch (error) {
-        console.error('Error in /api/submit-form:');
-        if (axios.isAxiosError(error)) {
-            console.error('Axios error details:', error.response?.data);
-            return NextResponse.json({ error: 'Failed to forward form data', details: error.response?.data }, { status: error.response?.status || 502 });
-        }
-        console.error(error);
+        console.error('Error in /api/submit-form:', error);
         return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
     }
 }
