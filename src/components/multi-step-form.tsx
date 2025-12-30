@@ -29,6 +29,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "./ui/textarea";
 
 // Schemas
 const step1Schema = z.object({
@@ -42,10 +43,10 @@ const finalStepSchema = z.object({
   contactName: z.string().min(2, "Name is required."),
   contactEmail: z.string().email("Invalid email address."),
   contactPhone: z.string().regex(/^\d{10,}$/, "Invalid phone number (must be at least 10 digits)."),
-  careRecipientName: z.string().optional(),
-  bestTime: z.string().optional(),
-  contactMethod: z.string().optional(),
-  additionalInfo: z.string().optional(),
+  careRecipientName: z.string().min(1, "Recipient's name is required."),
+  bestTime: z.string().min(1, "Please select a best time to contact."),
+  contactMethod: z.string().min(1, "Please select a contact method."),
+  additionalInfo: z.string().min(1, "This field is required."),
   isSelf: z.boolean().optional(),
 });
 
@@ -358,6 +359,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                                     <SelectItem value="anytime">Anytime</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <FormMessage />
                         </FormItem>
                     )}/>
 
@@ -373,8 +375,22 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
                                     <SelectItem value="email">Email</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <FormMessage />
                         </FormItem>
                     )}/>
+
+                    <FormField
+                        control={finalForm.control}
+                        name="additionalInfo"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Textarea placeholder="Is there anything else we should know?" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     
                     <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}

@@ -28,7 +28,7 @@ export function LocationContactForm() {
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.contactName || !form.contactPhone || !form.contactEmail) {
+        if (!form.contactName || !form.contactPhone || !form.contactEmail || !form.careRecipientName || !form.zipcode || !form.bestTime || !form.contactMethod || !form.additionalInfo) {
             toast({
                 title: "Error",
                 description: "Please fill out all required fields.",
@@ -78,14 +78,14 @@ export function LocationContactForm() {
             <form onSubmit={handleSubmit} className="space-y-4">
                 <h2 className="text-2xl font-bold text-center mb-4 text-foreground">Get Free Help</h2>
                 
-                <Input type="text" placeholder="Name of person needing care" value={form.careRecipientName} onChange={(e) => setForm({ ...form, careRecipientName: e.target.value })} className="bg-muted"/>
-                <Input type="text" placeholder="Zip code" value={form.zipcode} onChange={(e) => setForm({ ...form, zipcode: e.target.value })} className="bg-muted"/>
+                <Input type="text" placeholder="Name of person needing care" required value={form.careRecipientName} onChange={(e) => setForm({ ...form, careRecipientName: e.target.value })} className="bg-muted"/>
+                <Input type="text" placeholder="Zip code" required value={form.zipcode} onChange={(e) => setForm({ ...form, zipcode: e.target.value })} className="bg-muted"/>
                 <Input type="text" placeholder="Contact Name (First and Last Name)" required value={form.contactName} onChange={(e) => setForm({ ...form, contactName: e.target.value })} className="bg-muted"/>
                 <Input type="tel" placeholder="Contact Phone Number" required value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} className="bg-muted"/>
                 <Input type="email" placeholder="Contact Email" required value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} className="bg-muted"/>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Select onValueChange={(value) => setForm({ ...form, bestTime: value })}>
+                    <Select onValueChange={(value) => setForm({ ...form, bestTime: value })} value={form.bestTime}>
                         <SelectTrigger className="bg-muted"><SelectValue placeholder="Best time to contact?" /></SelectTrigger>
                         <SelectContent>
                             <SelectItem value="morning">Morning (8AM-12PM)</SelectItem>
@@ -94,7 +94,7 @@ export function LocationContactForm() {
                         </SelectContent>
                     </Select>
 
-                    <Select onValueChange={(value) => setForm({ ...form, contactMethod: value })}>
+                    <Select onValueChange={(value) => setForm({ ...form, contactMethod: value })} value={form.contactMethod}>
                         <SelectTrigger className="bg-muted"><SelectValue placeholder="Contact method?" /></SelectTrigger>
                         <SelectContent>
                             <SelectItem value="phone">Phone Call</SelectItem>
@@ -106,7 +106,7 @@ export function LocationContactForm() {
 
                 <div>
                     <h4 className="text-sm font-medium mb-2 text-foreground">Is there anything else we should know?</h4>
-                    <Textarea placeholder="Example: Please contact me on Monday afternoon" value={form.additionalInfo} onChange={(e) => setForm({ ...form, additionalInfo: e.target.value })} className="bg-muted"/>
+                    <Textarea placeholder="Example: Please contact me on Monday afternoon" required value={form.additionalInfo} onChange={(e) => setForm({ ...form, additionalInfo: e.target.value })} className="bg-muted"/>
                 </div>
 
                 <Button type="submit" className="w-full bg-accent hover:bg-accent/90" disabled={loading}>
