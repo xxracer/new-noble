@@ -3,8 +3,8 @@ import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Noble Health',
-  description: 'Compassionate care for your loved ones.',
+  title: 'Noble Health | Premier Home Health Care Services in Texas',
+  description: 'Noble Health provides compassionate, professional in-home health care across Texas. Find the perfect care match for your loved ones today with our free care consultation.',
 };
 
 export default function RootLayout({

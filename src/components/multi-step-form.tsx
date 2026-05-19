@@ -293,7 +293,7 @@ export function MultiStepForm({ initialLocation }: { initialLocation: string }) 
              {submitted ? (
               <div className="text-center p-4">
                 <h3 className="font-bold text-2xl mb-2">Thank you!</h3>
-                <p>Our team will reach out to you as soon as possible. If you'd like to speak with us sooner, you can text us directly at <strong>713-364-2295</strong>.</p>
+                <p>Our team will reach out to you as soon as possible. If you'd like to speak with us sooner, you can text us directly at <strong>713-378-0781</strong>.</p>
               </div>
             ) : (
                 <Form {...finalForm}>

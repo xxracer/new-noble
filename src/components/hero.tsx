@@ -79,7 +79,7 @@ export function Hero() {
       <div className="container grid lg:grid-cols-2 gap-12 items-center relative z-10">
         <div className="text-white py-12 lg:py-16">
           <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-            Simplifying the search for in home care in <span className="text-accent">{location}</span>
+            Simplifying the search for premier home health care in <span className="text-accent">{location}, Texas</span>
           </h1>
 
           <MultiStepForm initialLocation={location} />

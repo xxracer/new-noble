@@ -47,12 +47,12 @@ export function Header() {
                 FREE CARE CONSULTATION
               </Link>
             </Button>
-             <a href="tel:+17133642295">
+             <a href="tel:+17133780781">
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Phone className="mr-2 h-4 w-4" />
                   <div className="text-left">
                       <div className="text-xs leading-tight">CALL US</div>
-                      <div className="text-sm font-bold leading-tight">(713) 364-2295</div>
+                      <div className="text-sm font-bold leading-tight">(713) 378-0781</div>
                   </div>
               </Button>
             </a>
@@ -102,10 +102,10 @@ export function Header() {
                  </Link>
             </div>
             <div className={styles.mobileNavRight}>
-                <a href="tel:+17133642295">
+                <a href="tel:+17133780781">
                     <Button size="sm" className={`bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap ${styles.callButton}`}>
                         <Phone className="mr-1 h-3 w-3" />
-                        <span>(713) 364-2295</span>
+                        <span>(713) 378-0781</span
                     </Button>
                 </a>
             </div>
