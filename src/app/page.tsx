@@ -6,6 +6,7 @@ import { Hero } from "@/components/hero";
 import { InfoCards } from "@/components/info-cards";
 import { ServiceCarousel } from "@/components/service-carousel";
 import { AreasWeServe } from "@/components/areas-we-serve";
+import { TrustBar } from "@/components/trust-bar";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <TrustBar />
         <div id="services">
           <InfoCards />
         </div>

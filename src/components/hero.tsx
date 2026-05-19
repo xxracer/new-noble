@@ -79,9 +79,11 @@ export function Hero() {
       <div className="container grid lg:grid-cols-2 gap-12 items-center relative z-10">
         <div className="text-white py-12 lg:py-16">
           <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-            Simplifying the search for premier home health care in <span className="text-accent">{location}, Texas</span>
+            Get the Best Home Health Care in <span className="text-accent">{location}, Texas</span> — <span className="underline decoration-accent">Free Expert Match</span>
           </h1>
-
+          <p className="mt-4 text-lg text-white/90 max-w-xl" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
+            Stop stressing over endless searches. We match you with the top-rated certified agencies in your area in under 60 seconds. 100% Free.
+          </p>
           <MultiStepForm initialLocation={location} />
         </div>
         <div className="relative h-full min-h-[350px] lg:min-h-0 lg:h-full w-full hidden lg:block">
