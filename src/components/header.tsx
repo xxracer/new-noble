@@ -105,7 +105,7 @@ export function Header() {
                 <a href="tel:+17133780781">
                     <Button size="sm" className={`bg-primary hover:bg-primary/90 text-primary-foreground text-xs px-3 whitespace-nowrap ${styles.callButton}`}>
                         <Phone className="mr-1 h-3 w-3" />
-                        <span>(713) 378-0781</span
+                        <span>(713) 378-0781</span>
                     </Button>
                 </a>
             </div>
